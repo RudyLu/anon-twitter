@@ -1,0 +1,99 @@
+openapi: 3.0.0
+info:
+  version: 0.0.1
+  title: translation API
+servers:
+  - url: 'http://localhost:3001'
+paths:
+  /translations:
+    post:
+      summary: 'Create a new translation'
+      tags:
+        - translation
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                intent:
+                  type: string
+                  example: this is a intent
+                messageContent:
+                  type: string
+                  example: this is the corresponding message for the intent
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: object
+                  status:
+                    type: number
+        '400': # status code
+          description: Bad Request
+        '404': # status code
+          description: Cannot find any appropriate response
+    get:
+      summary: 'Query by an intent'
+      tags:
+        - translation
+      parameters:
+         - name: intent
+           in: query
+           description: The intent to be queried
+           required: true
+           schema:
+             type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                  status:
+                    type: number
+        '400': # status code
+          description: Bad Request
+        '404': # status code
+          description: Cannot find any appropriate response
+    delete:
+      summary: 'Delete translation'
+      tags:
+        - translation
+      requestBody: 
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                intent:
+                  type: string
+                  example: this is a intent
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: object
+                  status:
+                    type: number
+        '400': # status code
+          description: Bad Request
+        '404': # status code
+          description: Cannot find any appropriate response
+    
