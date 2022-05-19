@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export default async function handler(req, res) {
-  const url = `http://localhost:3000/tweets/retweet`;
+  const url = `${process.env.NEXT_PUBLIC_API_DOMAIN}/tweets/retweet`;
 
   try {
     var response = await axios.post(url, req.body);

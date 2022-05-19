@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export default async function handler(req, res) {
   var target = req.query.q;
-  const url = `http://localhost:3000/tweets`;
+  const url = `${process.env.NEXT_PUBLIC_API_DOMAIN}/tweets`;
 
   try {
     var response = await axios.get(url);
