@@ -40,7 +40,8 @@ app.use(function (err, req, res, next) {
 });
 
 //Set up mongoose connection
-var mongoDB = 'mongodb://127.0.0.1:27017/translations';
+//var mongoDB = 'mongodb://127.0.0.1:27017/translations';
+var mongoDB = 'mongodb+srv://admin:N0bSeX5AlEsAoPUp@rudy-twitter.ei6da.mongodb.net/?retryWrites=true&w=majority';
 mongoose
   .connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connection successful!'));
