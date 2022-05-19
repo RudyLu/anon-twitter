@@ -4,10 +4,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
+const dotenv = require("dotenv");
 
 var indexRouter = require('./routes/index');
 var tweetRouter = require('./routes/tweets');
 
+dotenv.config();
 var app = express();
 
 // view engine setup
@@ -41,7 +43,7 @@ app.use(function (err, req, res, next) {
 
 //Set up mongoose connection
 //var mongoDB = 'mongodb://127.0.0.1:27017/translations';
-var mongoDB = 'mongodb+srv://admin:N0bSeX5AlEsAoPUp@rudy-twitter.ei6da.mongodb.net/?retryWrites=true&w=majority';
+var mongoDB = process.env.MONGODB_CONNECTION;
 mongoose
   .connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connection successful!'));
