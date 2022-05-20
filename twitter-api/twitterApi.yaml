@@ -1,28 +1,25 @@
 openapi: 3.0.0
 info:
   version: 0.0.1
-  title: translation API
+  title: anonymous twitter API
 servers:
   - url: 'http://localhost:3001'
 paths:
-  /translations:
+  /tweets:
     post:
-      summary: 'Create a new translation'
+      summary: 'Create a new tweet'
       tags:
-        - translation
-      requestBody: 
+        - tweets
+      requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
               properties:
-                intent:
+                content:
                   type: string
-                  example: this is a intent
-                messageContent:
-                  type: string
-                  example: this is the corresponding message for the intent
+                  example: this is the content for this tweet
       responses:
         '200':
           description: OK
@@ -40,16 +37,9 @@ paths:
         '404': # status code
           description: Cannot find any appropriate response
     get:
-      summary: 'Query by an intent'
+      summary: 'Query the top 10 tweets'
       tags:
-        - translation
-      parameters:
-         - name: intent
-           in: query
-           description: The intent to be queried
-           required: true
-           schema:
-             type: string
+        - tweets
       responses:
         '200':
           description: OK
@@ -66,20 +56,21 @@ paths:
           description: Bad Request
         '404': # status code
           description: Cannot find any appropriate response
-    delete:
-      summary: 'Delete translation'
+  /tweets/retweet:
+    post:
+      summary: 'Retweet'
       tags:
-        - translation
-      requestBody: 
+        - tweets
+      requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
               properties:
-                intent:
+                retweet_id:
                   type: string
-                  example: this is a intent
+                  example: tweet Id to retweet
       responses:
         '200':
           description: OK
@@ -96,4 +87,3 @@ paths:
           description: Bad Request
         '404': # status code
           description: Cannot find any appropriate response
-    
