@@ -1,3 +1,5 @@
+var Mongoose = require('mongoose');
+
 const TOP_TIMELINE_COUNT = 10;
 
 class TweetController {
@@ -5,38 +7,23 @@ class TweetController {
     this.TweetModel = TweetModel;
   }
 
-  async query(req, res, next) {
-    // Validate request parameters, queries using express-validator
-    try {
-      var message = await this.TweetModel.find({ intent: req.query.intent });
-
-      if (message.length == 0) {
-        return res.status(404).json({
-          status: 404,
-          result: 'Not found',
-        });
-      }
-
-      var resMsg = message[0].messageContent;
-
-      return res.status(200).json({
-        status: 200,
-        result: resMsg,
-      });
-    } catch (e) {
-      return res.status(400).json({ status: 400, message: e.message });
-    }
-  }
-
   async create(req, res, next) {
     // Validate request parameters, queries using express-validator
     try {
-      const message = new this.TweetModel(req.body);
-      await message.save();
+      if (!req.body.content) {
+        throw new Error('content cannot be empty');
+      }
+
+      if (req.body.content.length > 140) {
+        throw new Error('each tweet should be under 140 characters');
+      }
+
+      const tweet = new this.TweetModel({ content: req.body.content });
+      await tweet.save();
 
       return res.status(200).json({
         status: 200,
-        result: message,
+        result: tweet,
       });
     } catch (e) {
       return res.status(400).json({ status: 400, message: e.message });
@@ -47,6 +34,25 @@ class TweetController {
     // Validate request parameters, queries using express-validator
     try {
       var retweetId = req.body.retweet_id;
+      console.log('reweet with: ', retweetId);
+
+      if (!retweetId || !Mongoose.isValidObjectId(retweetId)) {
+        throw new Error('cannot retweet with an invalid ID');
+      }
+
+      var tweet = await this.TweetModel.findOne({
+        _id: Mongoose.Types.ObjectId(retweetId),
+      });
+
+      if (!tweet) {
+        throw new Error('cannot retweet an non-existent tweet');
+      }
+
+      // HACK: consider an empty tweet here as a retweet
+      if (!tweet.content) {
+        throw new Error('cannot retweet an retweet');
+      }
+
       const message = new this.TweetModel({ retweet_id: retweetId });
       await message.save();
 
@@ -55,6 +61,7 @@ class TweetController {
         result: message,
       });
     } catch (e) {
+      console.error(e);
       return res.status(400).json({ status: 400, message: e.message });
     }
   }

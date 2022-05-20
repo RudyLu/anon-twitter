@@ -5,7 +5,7 @@ const input = {
   content: 'this is a tweet content',
 };
 
-describe('Message Model Testing', () => {
+describe('Tweet Model Testing', () => {
   it('creates a tweet', async () => {
     const tweet = new Tweet(input);
     var res = await tweet.save();
@@ -15,7 +15,7 @@ describe('Message Model Testing', () => {
   it('creates a retweet', async () => {
     const tweet = new Tweet(input);
     var res = await tweet.save();
-    const retweet = new Tweet({retweet_id: res.id});
+    const retweet = new Tweet({ retweet_id: res.id });
     var retweetRes = await retweet.save();
     expect(retweetRes.retweet_id.toString()).to.be.equal(res.id);
   });
